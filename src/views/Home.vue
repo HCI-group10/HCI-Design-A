@@ -3,11 +3,11 @@
     <!-- Header with logos and title -->
     <v-app-bar app color="primary" dark>
       <v-avatar>
-        <v-img src="@/assets/logo1.png" alt="Logo 1"></v-img>
+        <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
       </v-avatar>
       <v-toolbar-title class="mx-4">Book Buddy</v-toolbar-title>
       <v-avatar>
-        <v-img src="@/assets/logo2.png" alt="Logo 2"></v-img>
+        <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
       </v-avatar>
     </v-app-bar>
 
@@ -23,12 +23,23 @@
                 <!-- Text box -->
                 <v-col cols="4">
                   <v-text-field v-model="textBoxValue" label="Text Box"></v-text-field>
+
+                  <v-chip
+                  v-for="(chip, index) in chips"
+                  :key="index"
+                  close
+                  @click:close="removeChip(index)"
+                  >
+                  {{ chip }}
+                  </v-chip>
                 </v-col>
 
                 <!-- Add button -->
                 <v-col cols="2">
                   <v-btn color="primary" @click="addItem">Add</v-btn>
                 </v-col>
+
+                
 
                 <!-- Darker blue container with radio buttons -->
                 <v-col cols="4">
@@ -59,13 +70,12 @@
           <v-card class="elevation-2">
             <v-card-text>
               <v-data-table
-                :headers="headers"
-                :items="tableData"
-                :sort-by="sortBy"
-                :sort-desc="sortDesc"
-                multi-sort
-                show-select
-              ></v-data-table>
+              :headers="headers"
+              :items="desserts"
+              class="elevation-1"
+              item-key="name"
+              items-per-page="5"
+            ></v-data-table>
             </v-card-text>
           </v-card>
         </v-col>
@@ -76,30 +86,73 @@
 
 <script>
 export default {
-  data() {
-    return {
+  data: () => ({
       textBoxValue: "",
       selectedRadio: "",
-      headers: [
-        { text: "Name", value: "name", sortable: true },
-        { text: "Age", value: "age", sortable: true },
+      desserts: [
+        {
+          name: 'Frozen Yogurt',
+          calories: 159,
+          fat: 6.0,
+          carbs: 24,
+          protein: 4.0,
+          iron: 1,
+        },
+        {
+          name: 'Ice cream sandwich',
+          calories: 237,
+          fat: 9.0,
+          carbs: 37,
+          protein: 4.3,
+          iron: 1,
+        },
       ],
-      tableData: [
-        { name: "John", age: 30 },
-        { name: "Alice", age: 25 },
-        { name: "Bob", age: 35 },
+      headers: [
+        [
+          {
+            title: 'Dessert (100g serving)',
+            align: 'start',
+            sortable: false,
+            key: 'name',
+            rowspan: 2,
+          },
+          {
+            title: 'Properties',
+            key: 'foo',
+            colspan: 5,
+          },
+        ],
+        [
+          { title: 'Calories', align: 'end', key: 'calories' },
+          { title: 'Fat (g)', align: 'end', key: 'fat' },
+          { title: 'Carbs (g)', align: 'end', key: 'carbs' },
+          { title: 'Protein (g)', align: 'end', key: 'protein' },
+          { title: 'Iron (%)', align: 'end', key: 'iron' },
+        ],
       ],
       sortBy: "name",
       sortDesc: false,
-    };
-  },
+      selectedItem: null, 
+      chips: [],
+    }),
   methods: {
     addItem() {
-      // Add item logic
+      if (this.textBoxValue) {
+        this.chips.push(this.textBoxValue); // Add the value as a chip
+        this.textBoxValue = ""; // Clear the text box
+      }
+    },
+    removeChip(index) {
+      this.chips.splice(index, 1); // Remove the chip at the specified index
     },
     go() {
       // GO button logic
     },
   },
 };
+
 </script>
+
+<style>
+
+</style>
