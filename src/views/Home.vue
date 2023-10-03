@@ -1,15 +1,20 @@
 <template>
   <div>
     <!-- Header with logos and title -->
-    <v-app-bar app color="primary" dark>
-      <v-avatar>
-        <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
-      </v-avatar>
-      <v-toolbar-title class="mx-4">Book Buddy</v-toolbar-title>
-      <v-avatar>
-        <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
-      </v-avatar>
+    <v-app-bar app color="#525b76" dark flat class="pa-md-4 mx-lg-auto" width="250px">
+      <v-app-bar-title >
+        <div class="text-center" display="flex">
+          <v-avatar size="60">
+            <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
+          </v-avatar>
+          Book Buddy
+          <v-avatar size="60">
+            <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
+          </v-avatar>
+        </div>
+      </v-app-bar-title>
     </v-app-bar>
+
 
     <!-- Main content area -->
     <v-container fluid>
