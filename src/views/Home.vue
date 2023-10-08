@@ -1,8 +1,15 @@
 <template>
   <div>
     <!-- Header with logos and title -->
-    <v-app-bar app color="#525b76" dark flat class="pa-md-4 mx-lg-auto" width="250px">
-      <v-app-bar-title >
+    <v-app-bar
+      app
+      color="primary"
+      dark
+      flat
+      class="pa-md-4 mx-lg-auto"
+      width="250px"
+    >
+      <v-app-bar-title>
         <div class="text-center" display="flex">
           <v-avatar size="60">
             <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
@@ -15,7 +22,6 @@
       </v-app-bar-title>
     </v-app-bar>
 
-
     <!-- Main content area -->
     <v-container fluid>
       <!-- Light blue container -->
@@ -27,15 +33,18 @@
               <v-row align="center">
                 <!-- Text box -->
                 <v-col cols="4">
-                  <v-text-field v-model="textBoxValue" label="Text Box"></v-text-field>
+                  <v-text-field
+                    v-model="textBoxValue"
+                    label="Add course by course code"
+                  ></v-text-field>
 
                   <v-chip
-                  v-for="(chip, index) in chips"
-                  :key="index"
-                  close
-                  @click:close="removeChip(index)"
+                    v-for="(chip, index) in chips"
+                    :key="index"
+                    closable
+                    color="secondary"
                   >
-                  {{ chip }}
+                    {{ chip }}
                   </v-chip>
                 </v-col>
 
@@ -44,21 +53,24 @@
                   <v-btn color="primary" @click="addItem">Add</v-btn>
                 </v-col>
 
-                
-
                 <!-- Darker blue container with radio buttons -->
-              <v-col>
-                <v-row>
-                  <v-switch
-                      v-for="(header, index) in headers"
-                      :key="index"
-                      v-model="headerVisibility[index]"
-                      @change="toggleColumn(index)"
-                      :label="header.title"
-                      :color="'orange darken-2'"
-                  ></v-switch>
-                </v-row>
-              </v-col>
+
+                <v-col>
+                  <v-card color="tertiary">
+                    <v-card-text>
+                      <v-row>
+                        <v-switch
+                          v-for="(header, index) in headers"
+                          :key="index"
+                          v-model="headerVisibility[index]"
+                          @change="toggleColumn(index)"
+                          :label="header.title"
+                          :color="'orange darken-2'"
+                        ></v-switch>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
 
                 <!-- GO button -->
                 <v-col cols="2">
@@ -76,13 +88,13 @@
           <v-card class="elevation-2">
             <v-card-text>
               <v-data-table
-              :headers="visibleHeaders"
-              :items="textbooks"
-              class="elevation-1"
-              item-key="key"
-              items-per-page="5"
-            >
-          </v-data-table>
+                :headers="visibleHeaders"
+                :items="textbooks"
+                class="elevation-1"
+                item-key="key"
+                items-per-page="5"
+              >
+              </v-data-table>
             </v-card-text>
           </v-card>
         </v-col>
@@ -94,101 +106,101 @@
 <script>
 export default {
   data: () => ({
-  // Your existing data properties...
-  textBoxValue: "",
-  selectedRadio: "",
-  sortBy: "name",
-  sortDesc: false,
-  selectedItem: null,
-  chips: [],
-  headerVisibility: [],
-  textbooks: [
-    {
-      title: "COMPUTER NETWORKING: A TOP-DOWN APPROACH",
-      isbn: "9780133594140",
-      cover: "N/A",
-      author: "JAMES KUROSE, KEITH ROSS",
-      edition: "7TH",
-      copyright: "",
-      publisher: "PEARSON",
-      newRetailPrice: "$210.50",
-      usedRetailPrice: "$158.00",
-      usedRentalFee: "$88.41",
-    },
-    // You can add more textbook entries if needed
-  ],
-  headers: [
-    {
-      title: 'Title',
-      align: 'start',
-      sortable: true,
-      key: 'title',
-      visible: true,
-    },
-    {
-      title: 'ISBN',
-      align: 'end',
-      sortable: true,
-      key: 'isbn',
-      visible: true,
-    },
-    {
-      title: 'Cover',
-      align: 'end',
-      sortable: true,
-      key: 'cover',
-      visible: true,
-    },
-    {
-      title: 'Author',
-      align: 'end',
-      sortable: true,
-      key: 'author',
-      visible: true,
-    },
-    {
-      title: 'Edition',
-      align: 'end',
-      sortable: true,
-      key: 'edition', 
-      visible: true,
-    },
-    {
-      title: 'Copyright',
-      align: 'end',
-      sortable: true,
-      key: 'copyright',
-      visible: true,
-    },
-    {
-      title: 'Publisher',
-      align: 'end',
-      sortable: true,
-      key: 'publisher',
-      visible: true,
-    },
-    {
-      title: 'New Retail Price',
-      align: 'end',
-      sortable: true,
-      key: 'newRetailPrice',
-      visible: true,
-    },
-    {
-      title: 'Used Retail Price',
-      align: 'end',
-      sortable: true,
-      key: 'usedRetailPrice',
-      visible: true,
-    },
-    {
-      title: 'Used Rental Fee',
-      align: 'end',
-      sortable: false,
-      key: 'usedRentalFee',
-      visible: true,
-    },
-  ],
+    // Your existing data properties...
+    textBoxValue: "",
+    selectedRadio: "",
+    sortBy: "name",
+    sortDesc: false,
+    selectedItem: null,
+    chips: [],
+    headerVisibility: [],
+    textbooks: [
+      {
+        title: "COMPUTER NETWORKING: A TOP-DOWN APPROACH",
+        isbn: "9780133594140",
+        cover: "N/A",
+        author: "JAMES KUROSE, KEITH ROSS",
+        edition: "7TH",
+        copyright: "",
+        publisher: "PEARSON",
+        newRetailPrice: "$210.50",
+        usedRetailPrice: "$158.00",
+        usedRentalFee: "$88.41",
+      },
+      // You can add more textbook entries if needed
+    ],
+    headers: [
+      {
+        title: "Title",
+        align: "start",
+        sortable: true,
+        key: "title",
+        visible: true,
+      },
+      {
+        title: "ISBN",
+        align: "end",
+        sortable: true,
+        key: "isbn",
+        visible: true,
+      },
+      {
+        title: "Cover",
+        align: "end",
+        sortable: true,
+        key: "cover",
+        visible: true,
+      },
+      {
+        title: "Author",
+        align: "end",
+        sortable: true,
+        key: "author",
+        visible: true,
+      },
+      {
+        title: "Edition",
+        align: "end",
+        sortable: true,
+        key: "edition",
+        visible: true,
+      },
+      {
+        title: "Copyright",
+        align: "end",
+        sortable: true,
+        key: "copyright",
+        visible: true,
+      },
+      {
+        title: "Publisher",
+        align: "end",
+        sortable: true,
+        key: "publisher",
+        visible: true,
+      },
+      {
+        title: "New Retail Price",
+        align: "end",
+        sortable: true,
+        key: "newRetailPrice",
+        visible: true,
+      },
+      {
+        title: "Used Retail Price",
+        align: "end",
+        sortable: true,
+        key: "usedRetailPrice",
+        visible: true,
+      },
+      {
+        title: "Used Rental Fee",
+        align: "end",
+        sortable: false,
+        key: "usedRentalFee",
+        visible: true,
+      },
+    ],
   }),
   methods: {
     addItem() {
@@ -198,7 +210,7 @@ export default {
       }
     },
     removeChip(index) {
-      this.chips.splice(index, 1); // Remove the chip at the specified index
+      this.chips.splice(index, 1);
     },
     go() {
       // GO button logic
@@ -209,12 +221,15 @@ export default {
     },
     saveHeaderVisibility() {
       // Save header visibility to localStorage
-      localStorage.setItem('headerVisibility', JSON.stringify(this.headerVisibility));
+      localStorage.setItem(
+        "headerVisibility",
+        JSON.stringify(this.headerVisibility)
+      );
     },
     loadHeaderVisibility() {
       // Load header visibility from localStorage
-      
-      const storedVisibility = localStorage.getItem('headerVisibility');
+
+      const storedVisibility = localStorage.getItem("headerVisibility");
       if (storedVisibility) {
         this.headerVisibility = JSON.parse(storedVisibility);
       }
@@ -223,17 +238,17 @@ export default {
   computed: {
     visibleHeaders() {
       // Filter out headers that have visible set to true
-      return this.headers.filter(header => header.visible);
+      return this.headers.filter((header) => header.visible);
     },
   },
   mounted() {
     // Initialize headerVisibility with true values for all headers
-    this.headerVisibility = Array.from({ length: this.headers.length }, () => true);
+    this.headerVisibility = Array.from(
+      { length: this.headers.length },
+      () => true
+    );
   },
 };
-
 </script>
 
-<style>
-
-</style>
+<style></style>
