@@ -1,19 +1,19 @@
 <template>
-  <div>
-    <!-- Header with logos and title -->
-    <v-app-bar app color="#525b76" dark flat class="pa-md-4 mx-lg-auto" width="250px">
-      <v-app-bar-title >
-        <div class="text-center" display="flex">
-          <v-avatar size="60">
-            <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
-          </v-avatar>
-          Book Buddy
-          <v-avatar size="60">
-            <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
-          </v-avatar>
-        </div>
-      </v-app-bar-title>
-    </v-app-bar>
+  <v-app>
+  <div class="whole-app">
+    <div class="banner">
+      <v-avatar size="140">
+        <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
+      </v-avatar>
+
+      <span style='padding: 25%'>
+        Book Buddy
+      </span>
+
+      <v-avatar size="140">
+        <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
+      </v-avatar>
+    </div>
 
 
     <!-- Main content area -->
@@ -21,7 +21,7 @@
       <!-- Light blue container -->
       <v-row>
         <v-col cols="12">
-          <v-card class="elevation-2">
+          <v-card class="elevation-2" color="#D9F0FC">
             <v-card-text>
               <!-- Elements from left to right -->
               <v-row align="center">
@@ -43,8 +43,6 @@
                 <v-col cols="2">
                   <v-btn color="primary" @click="addItem">Add</v-btn>
                 </v-col>
-
-                
 
                 <!-- Darker blue container with radio buttons -->
                 <v-col cols="4">
@@ -86,7 +84,9 @@
         </v-col>
       </v-row>
     </v-container>
+  
   </div>
+</v-app>
 </template>
 
 <script>
@@ -159,5 +159,21 @@ export default {
 </script>
 
 <style>
-
+  .whole-app {
+    background-color: #F9F7F3;
+    padding: 15px;
+  }
+  
+  .banner {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    align-items: center;
+    text-align: center;
+    background: #525b76;
+    color: #F9F7F3;
+    font-size: 50px;
+    border-radius: 10px 10px 10px 10px;
+  }
 </style>
