@@ -1,26 +1,19 @@
 <template>
-  <div>
-    <!-- Header with logos and title -->
-    <v-app-bar
-      app
-      color="primary"
-      dark
-      flat
-      class="pa-md-4 mx-lg-auto"
-      width="250px"
-    >
-      <v-app-bar-title>
-        <div class="text-center" display="flex">
-          <v-avatar size="60">
-            <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
-          </v-avatar>
-          Book Buddy
-          <v-avatar size="60">
-            <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
-          </v-avatar>
-        </div>
-      </v-app-bar-title>
-    </v-app-bar>
+  <v-app>
+  <div class="whole-app">
+    <div class="banner">
+      <v-avatar size="140">
+        <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
+      </v-avatar>
+
+      <span style='padding: 25%'>
+        Book Buddy
+      </span>
+
+      <v-avatar size="140">
+        <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
+      </v-avatar>
+    </div>
 
     <!-- Main content area -->
     <v-container fluid>
@@ -100,7 +93,9 @@
         </v-col>
       </v-row>
     </v-container>
+  
   </div>
+</v-app>
 </template>
 
 <script>
@@ -251,4 +246,22 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+  .whole-app {
+    background-color: #F9F7F3;
+    padding: 15px;
+  }
+  
+  .banner {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    align-items: center;
+    text-align: center;
+    background: #525b76;
+    color: #F9F7F3;
+    font-size: 50px;
+    border-radius: 10px 10px 10px 10px;
+  }
+</style>
