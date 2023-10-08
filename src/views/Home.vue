@@ -15,27 +15,29 @@
       </v-avatar>
     </div>
 
-
     <!-- Main content area -->
     <v-container fluid>
       <!-- Light blue container -->
       <v-row>
-        <v-col cols="12">
-          <v-card class="elevation-2" color="#D9F0FC">
+        <v-col>
+          <v-card class="elevation-2">
             <v-card-text>
               <!-- Elements from left to right -->
               <v-row align="center">
                 <!-- Text box -->
                 <v-col cols="4">
-                  <v-text-field v-model="textBoxValue" label="Text Box"></v-text-field>
+                  <v-text-field
+                    v-model="textBoxValue"
+                    label="Add course by course code"
+                  ></v-text-field>
 
                   <v-chip
-                  v-for="(chip, index) in chips"
-                  :key="index"
-                  close
-                  @click:close="removeChip(index)"
+                    v-for="(chip, index) in chips"
+                    :key="index"
+                    closable
+                    color="secondary"
                   >
-                  {{ chip }}
+                    {{ chip }}
                   </v-chip>
                 </v-col>
 
@@ -45,14 +47,20 @@
                 </v-col>
 
                 <!-- Darker blue container with radio buttons -->
-                <v-col cols="4">
-                  <v-card class="elevation-2" color="blue darken-2">
+
+                <v-col>
+                  <v-card color="tertiary">
                     <v-card-text>
-                      <v-radio-group v-model="selectedRadio" column>
-                        <v-radio label="Option 1" value="Option 1"></v-radio>
-                        <v-radio label="Option 2" value="Option 2"></v-radio>
-                        <v-radio label="Option 3" value="Option 3"></v-radio>
-                      </v-radio-group>
+                      <v-row>
+                        <v-switch
+                          v-for="(header, index) in headers"
+                          :key="index"
+                          v-model="headerVisibility[index]"
+                          @change="toggleColumn(index)"
+                          :label="header.title"
+                          :color="'orange darken-2'"
+                        ></v-switch>
+                      </v-row>
                     </v-card-text>
                   </v-card>
                 </v-col>
@@ -73,12 +81,13 @@
           <v-card class="elevation-2">
             <v-card-text>
               <v-data-table
-              :headers="headers"
-              :items="desserts"
-              class="elevation-1"
-              item-key="name"
-              items-per-page="5"
-            ></v-data-table>
+                :headers="visibleHeaders"
+                :items="textbooks"
+                class="elevation-1"
+                item-key="key"
+                items-per-page="5"
+              >
+              </v-data-table>
             </v-card-text>
           </v-card>
         </v-col>
@@ -92,54 +101,102 @@
 <script>
 export default {
   data: () => ({
-      textBoxValue: "",
-      selectedRadio: "",
-      desserts: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: 1,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: 1,
-        },
-      ],
-      headers: [
-        [
-          {
-            title: 'Dessert (100g serving)',
-            align: 'start',
-            sortable: false,
-            key: 'name',
-            rowspan: 2,
-          },
-          {
-            title: 'Properties',
-            key: 'foo',
-            colspan: 5,
-          },
-        ],
-        [
-          { title: 'Calories', align: 'end', key: 'calories' },
-          { title: 'Fat (g)', align: 'end', key: 'fat' },
-          { title: 'Carbs (g)', align: 'end', key: 'carbs' },
-          { title: 'Protein (g)', align: 'end', key: 'protein' },
-          { title: 'Iron (%)', align: 'end', key: 'iron' },
-        ],
-      ],
-      sortBy: "name",
-      sortDesc: false,
-      selectedItem: null, 
-      chips: [],
-    }),
+    // Your existing data properties...
+    textBoxValue: "",
+    selectedRadio: "",
+    sortBy: "name",
+    sortDesc: false,
+    selectedItem: null,
+    chips: [],
+    headerVisibility: [],
+    textbooks: [
+      {
+        title: "COMPUTER NETWORKING: A TOP-DOWN APPROACH",
+        isbn: "9780133594140",
+        cover: "N/A",
+        author: "JAMES KUROSE, KEITH ROSS",
+        edition: "7TH",
+        copyright: "",
+        publisher: "PEARSON",
+        newRetailPrice: "$210.50",
+        usedRetailPrice: "$158.00",
+        usedRentalFee: "$88.41",
+      },
+      // You can add more textbook entries if needed
+    ],
+    headers: [
+      {
+        title: "Title",
+        align: "start",
+        sortable: true,
+        key: "title",
+        visible: true,
+      },
+      {
+        title: "ISBN",
+        align: "end",
+        sortable: true,
+        key: "isbn",
+        visible: true,
+      },
+      {
+        title: "Cover",
+        align: "end",
+        sortable: true,
+        key: "cover",
+        visible: true,
+      },
+      {
+        title: "Author",
+        align: "end",
+        sortable: true,
+        key: "author",
+        visible: true,
+      },
+      {
+        title: "Edition",
+        align: "end",
+        sortable: true,
+        key: "edition",
+        visible: true,
+      },
+      {
+        title: "Copyright",
+        align: "end",
+        sortable: true,
+        key: "copyright",
+        visible: true,
+      },
+      {
+        title: "Publisher",
+        align: "end",
+        sortable: true,
+        key: "publisher",
+        visible: true,
+      },
+      {
+        title: "New Retail Price",
+        align: "end",
+        sortable: true,
+        key: "newRetailPrice",
+        visible: true,
+      },
+      {
+        title: "Used Retail Price",
+        align: "end",
+        sortable: true,
+        key: "usedRetailPrice",
+        visible: true,
+      },
+      {
+        title: "Used Rental Fee",
+        align: "end",
+        sortable: false,
+        key: "usedRentalFee",
+        visible: true,
+      },
+    ],
+  }),
   methods: {
     addItem() {
       if (this.textBoxValue) {
@@ -148,14 +205,45 @@ export default {
       }
     },
     removeChip(index) {
-      this.chips.splice(index, 1); // Remove the chip at the specified index
+      this.chips.splice(index, 1);
     },
     go() {
       // GO button logic
     },
+    toggleColumn(index) {
+      // Toggle the visibility of the header/column
+      this.headers[index].visible = !this.headers[index].visible;
+    },
+    saveHeaderVisibility() {
+      // Save header visibility to localStorage
+      localStorage.setItem(
+        "headerVisibility",
+        JSON.stringify(this.headerVisibility)
+      );
+    },
+    loadHeaderVisibility() {
+      // Load header visibility from localStorage
+
+      const storedVisibility = localStorage.getItem("headerVisibility");
+      if (storedVisibility) {
+        this.headerVisibility = JSON.parse(storedVisibility);
+      }
+    },
+  },
+  computed: {
+    visibleHeaders() {
+      // Filter out headers that have visible set to true
+      return this.headers.filter((header) => header.visible);
+    },
+  },
+  mounted() {
+    // Initialize headerVisibility with true values for all headers
+    this.headerVisibility = Array.from(
+      { length: this.headers.length },
+      () => true
+    );
   },
 };
-
 </script>
 
 <style>
