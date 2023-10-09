@@ -2,12 +2,17 @@
   <div class="launch-page">
     <div class="centered-content">
       <h1 class="title">Welcome to Book Buddy</h1>
-      <p class="description">Your one-stop solution for effortlessly managing your class materials.</p>
+      <p class="description">
+        Your one-stop solution for effortlessly managing your class materials.
+      </p>
       <div class="instructions">
         <ol>
           <li>Enter your class codes in the search bar.</li>
           <li>Click the "Go" button.</li>
-          <li>We'll retrieve all the textbook information you need for your courses.</li>
+          <li>
+            We'll retrieve all the textbook information you need for your
+            courses.
+          </li>
         </ol>
       </div>
       <button @click="redirectToHome" class="btn-primary">Let's Go</button>
@@ -20,7 +25,7 @@ export default {
   methods: {
     redirectToHome() {
       // You can use router navigation to go to the Home page or any other desired route
-      this.$router.push({ name: 'Home' }); // Change 'Home' to the actual name of your home route
+      this.$router.push({ name: "Home" }); // Change 'Home' to the actual name of your home route
     },
   },
 };
@@ -32,7 +37,7 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #007bff; /* Blue background color */
+  background-color: #525b76; /* Blue background color */
 }
 
 .centered-content {
@@ -46,7 +51,7 @@ export default {
 .title {
   font-size: 36px;
   margin-bottom: 20px;
-  color: #007bff; /* Blue title color */
+  color: #5487dd; /* Blue title color */
 }
 
 .description {
