@@ -35,7 +35,7 @@
                     v-for="(chip, index) in chips"
                     :key="index"
                     closable
-                    color="secondary"
+                    color="tertiary"
                   >
                     {{ chip }}
                   </v-chip>
@@ -48,7 +48,7 @@
 
                 <!-- Darker blue container with radio buttons -->
                 <v-col >
-                  <v-card color="tertiary">
+                  <v-card color="#FFFFFF">
                     <v-card-text>
                       <v-row> 
                         <v-switch class="custom-sw"
@@ -57,7 +57,7 @@
                             v-model="headerVisibility[index]"
                             @change="toggleColumn(index)"
                             :label="header.title"
-                            :color="'#F9F7F3'"
+                            :color="'tertiary'"
                           ></v-switch>
                       </v-row>
                     </v-card-text>
@@ -78,11 +78,10 @@
       <v-row>
         <v-col cols="12">
           <v-card class="elevation-2">
-            <v-card-text class="light-blue-container">
-              <v-data-table color="#F9F7F3"
+            <v-card-text color="#FFFFFF">
+              <v-data-table color="#FFFFFF"
                 :headers="visibleHeaders"
                 :items="textbooks"
-                class="elevation-1"
                 item-key="key"
                 items-per-page="5"
               >
@@ -241,7 +240,7 @@ export default {
 
 <style>
   .whole-app {
-    background-color: #F9F7F3;
+    background-color: #FFFFFF;
     padding: 15px;
     font-family: 'Epilogue', sans-serif;
     font-weight: 400;
@@ -257,7 +256,7 @@ export default {
     background: #525b76;
     color: #F9F7F3;
     font-size: 60px;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 3px 3px 3px 3px;
     font-family: 'Epilogue', sans-serif;
     font-weight: 700;
   }
