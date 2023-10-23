@@ -6,7 +6,7 @@
         <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
       </v-avatar>
 
-      <span style='padding: 25%'>
+      <span style='padding: 20%'>
         Book Buddy
       </span>
 
@@ -20,18 +20,18 @@
       <!-- Light blue container -->
       <v-row>
         <v-col>
-          <v-card class="elevation-2">
+          <v-card class="elevation-2, light-blue-container">
             <v-card-text>
               <!-- Elements from left to right -->
               <v-row align="center">
                 <!-- Text box -->
                 <v-col cols="4">
-                  <v-text-field
+                  <v-text-field class="text-field" variant="solo-filled"
                     v-model="textBoxValue"
                     label="Add course by course code"
                   ></v-text-field>
 
-                  <v-chip
+                  <v-chip variant="outlined"
                     v-for="(chip, index) in chips"
                     :key="index"
                     closable
@@ -42,32 +42,31 @@
                 </v-col>
 
                 <!-- Add button -->
-                <v-col cols="2">
-                  <v-btn color="primary" @click="addItem">Add</v-btn>
+                <v-col cols="1">
+                  <v-btn class="custom-btn" @click="addItem">Add</v-btn>
                 </v-col>
 
                 <!-- Darker blue container with radio buttons -->
-
-                <v-col>
+                <v-col >
                   <v-card color="tertiary">
                     <v-card-text>
-                      <v-row>
-                        <v-switch
-                          v-for="(header, index) in headers"
-                          :key="index"
-                          v-model="headerVisibility[index]"
-                          @change="toggleColumn(index)"
-                          :label="header.title"
-                          :color="'orange darken-2'"
-                        ></v-switch>
+                      <v-row> 
+                        <v-switch class="custom-sw"
+                            v-for="(header, index) in headers"
+                            :key="index"
+                            v-model="headerVisibility[index]"
+                            @change="toggleColumn(index)"
+                            :label="header.title"
+                            :color="'#F9F7F3'"
+                          ></v-switch>
                       </v-row>
                     </v-card-text>
                   </v-card>
                 </v-col>
 
                 <!-- GO button -->
-                <v-col cols="2">
-                  <v-btn color="primary" @click="go">GO</v-btn>
+                <v-col cols="1">
+                  <v-btn class="custom-btn" @click="go">GO</v-btn>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -79,8 +78,8 @@
       <v-row>
         <v-col cols="12">
           <v-card class="elevation-2">
-            <v-card-text>
-              <v-data-table
+            <v-card-text class="light-blue-container">
+              <v-data-table color="#F9F7F3"
                 :headers="visibleHeaders"
                 :items="textbooks"
                 class="elevation-1"
@@ -113,15 +112,23 @@ export default {
       {
         title: "COMPUTER NETWORKING: A TOP-DOWN APPROACH",
         isbn: "9780133594140",
-        cover: "N/A",
         author: "JAMES KUROSE, KEITH ROSS",
         edition: "7TH",
-        copyright: "",
         publisher: "PEARSON",
         newRetailPrice: "$210.50",
         usedRetailPrice: "$158.00",
         usedRentalFee: "$88.41",
       },
+      {
+        title: "COMPUTER NETWORKING: A TOP-DOWN APPROACH",
+        isbn: "9780133594140",
+        author: "JAMES KUROSE, KEITH ROSS",
+        edition: "7TH",
+        publisher: "PEARSON",
+        newRetailPrice: "$210.50",
+        usedRetailPrice: "$158.00",
+        usedRentalFee: "$88.41",
+      }
       // You can add more textbook entries if needed
     ],
     headers: [
@@ -140,13 +147,6 @@ export default {
         visible: true,
       },
       {
-        title: "Cover",
-        align: "end",
-        sortable: true,
-        key: "cover",
-        visible: true,
-      },
-      {
         title: "Author",
         align: "end",
         sortable: true,
@@ -158,13 +158,6 @@ export default {
         align: "end",
         sortable: true,
         key: "edition",
-        visible: true,
-      },
-      {
-        title: "Copyright",
-        align: "end",
-        sortable: true,
-        key: "copyright",
         visible: true,
       },
       {
@@ -250,6 +243,8 @@ export default {
   .whole-app {
     background-color: #F9F7F3;
     padding: 15px;
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 400;
   }
   
   .banner {
@@ -261,7 +256,26 @@ export default {
     text-align: center;
     background: #525b76;
     color: #F9F7F3;
-    font-size: 50px;
+    font-size: 60px;
     border-radius: 10px 10px 10px 10px;
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 700;
+  }
+
+  .light-blue-container {
+    background-color: #D9F0FC;
+  }
+
+  .text-field {
+    color: #F9F7F3;
+  }
+
+  .custom-btn {
+    background-color: #F7A072 !important;
+    color: #F9F7F3 !important;
+  }
+
+  .custom-sw {
+    width: 20%;
   }
 </style>

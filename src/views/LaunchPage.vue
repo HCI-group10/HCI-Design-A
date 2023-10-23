@@ -47,16 +47,22 @@ export default {
   font-size: 36px;
   margin-bottom: 20px;
   color: #525B76; /* Blue title color */
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
 }
 
 .description {
   font-size: 18px;
   margin-bottom: 20px;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
 }
 
 .instructions {
   font-size: 16px;
   margin-bottom: 20px;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
 }
 
 ol {
@@ -73,6 +79,8 @@ ol {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
 }
 
 .btn-primary:hover {
