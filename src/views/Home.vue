@@ -257,7 +257,7 @@ export default {
     background: #525b76;
     color: #F9F7F3;
     font-size: 60px;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 3px 3px 3px 3px;
     font-family: 'Epilogue', sans-serif;
     font-weight: 700;
   }
