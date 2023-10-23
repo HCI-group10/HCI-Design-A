@@ -242,23 +242,23 @@ export default {
   .whole-app {
     background-color: #FFFFFF;
     padding: 15px;
-    font-family: 'Epilogue', sans-serif;
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
     font-weight: 400;
   }
   
   .banner {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
     align-items: center;
     text-align: center;
     background: #525b76;
     color: #F9F7F3;
-    font-size: 60px;
+    font-size: 80px;
     border-radius: 3px 3px 3px 3px;
-    font-family: 'Epilogue', sans-serif;
-    font-weight: 700;
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-weight: 400;
   }
 
   .light-blue-container {
@@ -266,12 +266,12 @@ export default {
   }
 
   .text-field {
-    color: #F9F7F3;
+    color: #FFFFFF;
   }
 
   .custom-btn {
     background-color: #F7A072 !important;
-    color: #F9F7F3 !important;
+    color: #FFFFFF !important;
   }
 
   .custom-sw {
