@@ -32,13 +32,13 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #007bff; /* Blue background color */
+  background-color: #5487DD; /* Blue background color */
 }
 
 .centered-content {
   text-align: center;
   padding: 20px;
-  background-color: #ffffff; /* White content background color */
+  background-color: #F9F7F3; /* White content background color */
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Box shadow for content */
 }
@@ -46,7 +46,7 @@ export default {
 .title {
   font-size: 36px;
   margin-bottom: 20px;
-  color: #007bff; /* Blue title color */
+  color: #525B76; /* Blue title color */
 }
 
 .description {
@@ -67,7 +67,7 @@ ol {
 .btn-primary {
   font-size: 24px;
   padding: 10px 20px;
-  background-color: #ff8000; /* Orange button background color */
+  background-color: #F7A072; /* Orange button background color */
   color: #fff; /* Button text color */
   border: none;
   border-radius: 5px;
@@ -76,6 +76,6 @@ ol {
 }
 
 .btn-primary:hover {
-  background-color: #e67000; /* Orange button background color on hover */
+  background-color: #e98149; /* Orange button background color on hover */
 }
 </style>
