@@ -1,19 +1,21 @@
 <template>
   <v-app>
-  <div class="whole-app">
-    <div class="banner">
-      <v-avatar size="140">
-        <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
-      </v-avatar>
+    <div class="whole-app">
+      <div class="banner">
+        <v-avatar size="140">
+          <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
+        </v-avatar>
+
 
       <span style='padding: 20%'>
         Book Buddy
       </span>
 
-      <v-avatar size="140">
-        <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
-      </v-avatar>
-    </div>
+        <v-avatar size="140">
+          <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
+        </v-avatar>
+      </div>
+
 
     <!-- Main content area -->
     <v-container fluid>
@@ -97,6 +99,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import cheerio from "cheerio";
+
 export default {
   data: () => ({
     // Your existing data properties...
@@ -201,6 +206,28 @@ export default {
     },
     go() {
       // GO button logic
+      //call get class info for each item in chips
+      //if exists store
+      //if class doesn't exist sent alert that it didn't work and skip (TODO)
+
+      let validCourses = this.getClassInfo();
+
+      console.log(validCourses);
+
+      //run through each item stored and create url then search up table data
+      //parse table data to create items
+      //add said items to textbooks object
+
+      validCourses.forEach((course) => {
+        //{classId, classnumber} objects
+        const url = `https://www.bsd.ufl.edu/textadoption/studentview/displayadoption1sect.aspx?SECT=${course.classNumber}&YEAR=23&TERM=8`;
+
+        const data = this.fetchData(url);
+        if (html) {
+          console.log(fixArray(data));
+          textbooks = fixArray(data);
+        }
+      });
     },
     toggleColumn(index) {
       // Toggle the visibility of the header/column
@@ -220,6 +247,121 @@ export default {
       if (storedVisibility) {
         this.headerVisibility = JSON.parse(storedVisibility);
       }
+    },
+    async getClassInfo() {
+      let validCourses = [];
+      let invalidCourse = [];
+
+      const courses = this.chips.map((element) =>
+        element.split(" ").join("").toUpperCase()
+      ); //remove whitespace and make upper case just in case the user gets funky with it
+
+      for (let classId of courses) {
+        try {
+          const apiString = `https://one.ufl.edu/apix/soc/schedule/?category=RES&term=2238&course-code=${classId}`;
+          const response = await axios.get(apiString);
+          const data = response.data;
+
+          if (
+            data &&
+            Array.isArray(data) &&
+            data.length > 0 &&
+            data[0].COURSES &&
+            Array.isArray(data[0].COURSES) &&
+            data[0].COURSES.length > 0
+          ) {
+            const classNumber = data[0].COURSES[0].sections[0].classNumber;
+            validCourses.push({ classId, classNumber });
+          } else {
+            const classNumber = data[0].COURSES[0].sections[0].classNumber;
+            invalidCourse.push({ classId, classNumber });
+            console.log(
+              `COURSES array is empty or not found for class ${classId}. Skipping...`
+            );
+          }
+        } catch (error) {
+          console.error(`Error fetching URL for class ${classId}: ${error}`);
+        }
+      }
+
+      return validCourses;
+    },
+    async fetchData(url) {
+      try {
+        const response = await axios.get(url); //fetches html
+        const htmlContent = response.data;
+        const $ = cheerio.load(htmlContent); //creates a query item out of html
+        const table = $("table.books");
+
+        if (table) {
+          const data = [];
+          const rows = $("table.books tbody tr");
+
+          const requiredInfo = [
+            //teh stuff we want :)
+            "Title",
+            "ISBN",
+            "Cover",
+            "Author",
+            "Edition",
+            "Copyright",
+            "Publisher",
+            "NewRetailPrice",
+            "UsedRetailPrice",
+            "NewRentalFee",
+            "UsedRentalFee",
+          ];
+
+          let tempObject = {};
+
+          //goes through each row and grabs every key possible but filters it to just the stuff we want
+          rows.each((index, element) => {
+            $(element)
+              .find("td")
+              .each((i, el) => {
+                const key = $(el).text().trim().replace(":", ""); // Get the key for the object
+                const value = $(el).next("td.books").text().trim(); // Get the value for the key
+                // Store the data if it is required information
+                const trimmedKey = key.trim();
+                const normalizedKey = trimmedKey.replace(/\s/g, ""); // remove spaces
+                if (key && requiredInfo.includes(normalizedKey)) {
+                  tempObject[normalizedKey.toLowerCase()] = value; //set to lowercase and add
+                }
+
+                if (normalizedKey.startsWith("Thistextis")) {
+                  const restOfKey = normalizedKey.substring(
+                    "Thistextis".length
+                  );
+                  tempObject["TextIs?"] = restOfKey;
+                }
+              });
+
+            if (Object.keys(tempObject).length > 0) {
+              data.push(tempObject);
+              tempObject = {};
+            }
+          });
+
+          return fixArray(data);
+        } else {
+          return "Table with class 'books' not found.";
+        }
+      } catch (error) {
+        return `Error fetching URL. ${error}`;
+      }
+    },
+    fixArray(arr) {
+      // Combine every four array items because the website set up their table in the worst way possible
+      const combinedObjects = [];
+      for (let i = 0; i < arr.length; i += 4) {
+        const combined = {};
+        for (let j = 0; j < 4 && i + j < arr.length; j++) {
+          Object.assign(combined, arr[i + j]);
+        }
+        combinedObjects.push(combined);
+      }
+
+      return combinedObjects;
     },
   },
   computed: {
