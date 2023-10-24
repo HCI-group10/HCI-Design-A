@@ -6,54 +6,54 @@
           <v-img src="@/assets/logo.png" alt="Logo 1"></v-img>
         </v-avatar>
 
-
-      <span style='padding: 20%'>
-        Book Buddy
-      </span>
+        <span style="padding: 20%"> Book Buddy </span>
 
         <v-avatar size="140">
           <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
         </v-avatar>
       </div>
 
+      <!-- Main content area -->
+      <v-container fluid>
+        <!-- Light blue container -->
+        <v-row>
+          <v-col>
+            <v-card class="elevation-2, light-blue-container">
+              <v-card-text>
+                <!-- Elements from left to right -->
+                <v-row align="center">
+                  <!-- Text box -->
+                  <v-col cols="4">
+                    <v-text-field
+                      class="text-field"
+                      variant="solo-filled"
+                      v-model="textBoxValue"
+                      label="Add course by course code"
+                    ></v-text-field>
 
-    <!-- Main content area -->
-    <v-container fluid>
-      <!-- Light blue container -->
-      <v-row>
-        <v-col>
-          <v-card class="elevation-2, light-blue-container">
-            <v-card-text>
-              <!-- Elements from left to right -->
-              <v-row align="center">
-                <!-- Text box -->
-                <v-col cols="4">
-                  <v-text-field class="text-field" variant="solo-filled"
-                    v-model="textBoxValue"
-                    label="Add course by course code"
-                  ></v-text-field>
+                    <v-chip
+                      variant="outlined"
+                      v-for="(chip, index) in chips"
+                      :key="index"
+                      closable
+                      color="tertiary"
+                    >
+                      {{ chip }}
+                    </v-chip>
+                  </v-col>
 
-                  <v-chip variant="outlined"
-                    v-for="(chip, index) in chips"
-                    :key="index"
-                    closable
-                    color="tertiary"
-                  >
-                    {{ chip }}
-                  </v-chip>
-                </v-col>
+                  <!-- Add button -->
+                  <v-col cols="1">
+                    <v-btn class="custom-btn" @click="addItem">Add</v-btn>
+                  </v-col>
 
-                <!-- Add button -->
-                <v-col cols="1">
-                  <v-btn class="custom-btn" @click="addItem">Add</v-btn>
-                </v-col>
-
-                <!-- Darker blue container with radio buttons -->
-                <v-col >
-                  <v-card color="#FFFFFF">
-                    <v-card-text>
-                      <v-row> 
-                        <v-switch class="custom-sw"
+                  <!-- Darker blue container with radio buttons -->
+                  <v-col>
+                    <v-card color="#FFFFFF">
+                      <v-card-text>
+                        <v-row>
+                          <v-switch
+                            class="custom-sw"
                             v-for="(header, index) in headers"
                             :key="index"
                             v-model="headerVisibility[index]"
@@ -61,41 +61,41 @@
                             :label="header.title"
                             :color="'tertiary'"
                           ></v-switch>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
 
-                <!-- GO button -->
-                <v-col cols="1">
-                  <v-btn class="custom-btn" @click="go">GO</v-btn>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+                  <!-- GO button -->
+                  <v-col cols="1">
+                    <v-btn class="custom-btn" @click="go">GO</v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
 
-      <!-- Table with sortable headers -->
-      <v-row>
-        <v-col cols="12">
-          <v-card class="elevation-2">
-            <v-card-text color="#FFFFFF">
-              <v-data-table color="#FFFFFF"
-                :headers="visibleHeaders"
-                :items="textbooks"
-                item-key="key"
-                items-per-page="5"
-              >
-              </v-data-table>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  
-  </div>
-</v-app>
+        <!-- Table with sortable headers -->
+        <v-row>
+          <v-col cols="12">
+            <v-card class="elevation-2">
+              <v-card-text color="#FFFFFF">
+                <v-data-table
+                  color="#FFFFFF"
+                  :headers="visibleHeaders"
+                  :items="textbooks"
+                  item-key="key"
+                  items-per-page="5"
+                >
+                </v-data-table>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+  </v-app>
 </template>
 
 <script>
@@ -132,7 +132,7 @@ export default {
         newRetailPrice: "$210.50",
         usedRetailPrice: "$158.00",
         usedRentalFee: "$88.41",
-      }
+      },
       // You can add more textbook entries if needed
     ],
     headers: [
@@ -204,13 +204,13 @@ export default {
     removeChip(index) {
       this.chips.splice(index, 1);
     },
-    go() {
+    async go() {
       // GO button logic
       //call get class info for each item in chips
       //if exists store
       //if class doesn't exist sent alert that it didn't work and skip (TODO)
 
-      let validCourses = this.getClassInfo();
+      let validCourses = await getClassInfo();
 
       console.log(validCourses);
 
@@ -218,16 +218,15 @@ export default {
       //parse table data to create items
       //add said items to textbooks object
 
-      validCourses.forEach((course) => {
+      for (let course of validCourses) {
         //{classId, classnumber} objects
         const url = `https://www.bsd.ufl.edu/textadoption/studentview/displayadoption1sect.aspx?SECT=${course.classNumber}&YEAR=23&TERM=8`;
 
-        const data = this.fetchData(url);
-        if (html) {
-          console.log(fixArray(data));
+        const data = await fetchData(url);
+        if (data) {
           textbooks = fixArray(data);
         }
-      });
+      }
     },
     toggleColumn(index) {
       // Toggle the visibility of the header/column
@@ -381,42 +380,42 @@ export default {
 </script>
 
 <style>
-  .whole-app {
-    background-color: #FFFFFF;
-    padding: 15px;
-    font-family: 'IBM Plex Sans Condensed', sans-serif;
-    font-weight: 400;
-  }
-  
-  .banner {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    align-items: center;
-    text-align: center;
-    background: #525b76;
-    color: #F9F7F3;
-    font-size: 80px;
-    border-radius: 3px 3px 3px 3px;
-    font-family: 'IBM Plex Sans Condensed', sans-serif;
-    font-weight: 400;
-  }
+.whole-app {
+  background-color: #ffffff;
+  padding: 15px;
+  font-family: "IBM Plex Sans Condensed", sans-serif;
+  font-weight: 400;
+}
 
-  .light-blue-container {
-    background-color: #D9F0FC;
-  }
+.banner {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  align-items: center;
+  text-align: center;
+  background: #525b76;
+  color: #f9f7f3;
+  font-size: 80px;
+  border-radius: 3px 3px 3px 3px;
+  font-family: "IBM Plex Sans Condensed", sans-serif;
+  font-weight: 400;
+}
 
-  .text-field {
-    color: #FFFFFF;
-  }
+.light-blue-container {
+  background-color: #d9f0fc;
+}
 
-  .custom-btn {
-    background-color: #F7A072 !important;
-    color: #FFFFFF !important;
-  }
+.text-field {
+  color: #ffffff;
+}
 
-  .custom-sw {
-    width: 20%;
-  }
+.custom-btn {
+  background-color: #f7a072 !important;
+  color: #ffffff !important;
+}
+
+.custom-sw {
+  width: 20%;
+}
 </style>
