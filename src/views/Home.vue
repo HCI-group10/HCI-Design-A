@@ -88,11 +88,72 @@
                   item-key="key"
                   items-per-page="5"
                 >
+                  <template v-slot:[`item.moreinfo`]="{ item }">
+                    <v-btn @click="openModal(item)" color="primary" dark
+                      >More Info</v-btn
+                    >
+                  </template>
                 </v-data-table>
               </v-card-text>
             </v-card>
           </v-col>
         </v-row>
+        <v-dialog v-model="modalOpen" max-width="600">
+          <v-card>
+            <v-toolbar flat color="primary">
+              <v-spacer></v-spacer>
+              <v-btn icon @click="modalOpen = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-title class="d-flex justify-center headline">{{
+              selectedTextbook.title
+            }}</v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="6">
+                    <div>
+                      <strong>Author:</strong> {{ selectedTextbook.author }}
+                    </div>
+                    <div>
+                      <strong>ISBN:</strong> {{ selectedTextbook.isbn }}
+                    </div>
+                    <div>
+                      <strong>Edition:</strong> {{ selectedTextbook.edition }}
+                    </div>
+                    <div>
+                      <strong>Publisher:</strong>
+                      {{ selectedTextbook.publisher }}
+                    </div>
+                  </v-col>
+                  <v-col cols="6">
+                    <div>
+                      <strong>New Retail Price:</strong>
+                      {{ selectedTextbook.newRetailPrice }}
+                    </div>
+                    <div>
+                      <strong>Used Retail Price:</strong>
+                      {{ selectedTextbook.usedRetailPrice }}
+                    </div>
+                    <div>
+                      <strong>Used Rental Fee:</strong>
+                      {{ selectedTextbook.usedRentalFee }}
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions class="d-flex justify-center">
+              <v-btn color="primary" @click="openLink('amazon')" outlined
+                >Buy from Amazon</v-btn
+              >
+              <v-btn color="primary" @click="openLink('google')" outlined
+                >Buy from Google</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-container>
     </div>
   </v-app>
@@ -107,6 +168,8 @@ export default {
     // Your existing data properties...
     textBoxValue: "",
     selectedRadio: "",
+    modalOpen: false,
+    selectedTextbook: {},
     sortBy: "name",
     sortDesc: false,
     selectedItem: null,
@@ -122,6 +185,8 @@ export default {
         newRetailPrice: "$210.50",
         usedRetailPrice: "$158.00",
         usedRentalFee: "$88.41",
+        moreinfo: "",
+        TextIs: "optional",
       },
       {
         title: "COMPUTER NETWORKING: A TOP-DOWN APPROACH",
@@ -132,6 +197,7 @@ export default {
         newRetailPrice: "$210.50",
         usedRetailPrice: "$158.00",
         usedRentalFee: "$88.41",
+        TextIs: "optional",
       },
       // You can add more textbook entries if needed
     ],
@@ -190,6 +256,20 @@ export default {
         align: "end",
         sortable: false,
         key: "usedRentalFee",
+        visible: true,
+      },
+      {
+        title: "Textbook is?",
+        align: "end",
+        sortable: false,
+        key: "TextIs",
+        visible: true,
+      },
+      {
+        title: "More Info",
+        align: "end",
+        sortable: false,
+        key: "moreinfo",
         visible: true,
       },
     ],
@@ -331,7 +411,7 @@ export default {
                   const restOfKey = normalizedKey.substring(
                     "Thistextis".length
                   );
-                  tempObject["TextIs?"] = restOfKey;
+                  tempObject["TextIs"] = restOfKey;
                 }
               });
 
@@ -349,6 +429,65 @@ export default {
         return `Error fetching URL. ${error}`;
       }
     },
+    async generateTextbookLinkGoog(title, author, isbn) {
+      const baseUrl = "https://www.googleapis.com/books/v1/volumes";
+      const query = `intitle:${title}+inauthor:${author}`;
+      const encodedQuery = encodeURIComponent(query);
+      const url = `${baseUrl}?q=${encodedQuery}`;
+
+      try {
+        const response = await axios.get(url);
+        const data = response.data;
+        if (data.items && data.items.length > 0) {
+          const book = data.items[0];
+          const infoLink = book.volumeInfo.infoLink;
+          return infoLink ? infoLink : "";
+        } else {
+          return "";
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching book information from Google Books API: ",
+          error
+        );
+        return "";
+      }
+    },
+    generateTextbookLinkAmazon(title, author, isbn) {
+      const baseUrl = "https://www.amazon.com/s?";
+      const encodedTitle = encodeURIComponent(title);
+      const encodedAuthor = encodeURIComponent(author);
+      const encodedIsbn = isbn ? encodeURIComponent(isbn) : "";
+
+      let urlParameters = `k=${encodedTitle}+${encodedAuthor}+textbook&i=stripbooks`;
+      if (encodedIsbn !== "") {
+        urlParameters += `&field-isbn=${encodedIsbn}`;
+      }
+
+      return baseUrl + urlParameters;
+    },
+    async openLink(source) {
+      let link = "";
+      if (source === "amazon") {
+        link = this.generateTextbookLinkAmazon(
+          this.selectedTextbook.title,
+          this.selectedTextbook.author,
+          this.selectedTextbook.isbn
+        );
+      } else if (source === "google") {
+        link = await this.generateTextbookLinkGoog(
+          this.selectedTextbook.title,
+          this.selectedTextbook.author,
+          this.selectedTextbook.isbn
+        );
+      }
+      console.log(link);
+      if (link) {
+        window.open(link, "_blank");
+      } else {
+        console.log("ERROR WITH LINK");
+      }
+    },
     fixArray(arr) {
       // Combine every four array items because the website set up their table in the worst way possible
       const combinedObjects = [];
@@ -361,6 +500,32 @@ export default {
       }
 
       return combinedObjects;
+    },
+    openModal(item) {
+      const {
+        title,
+        author,
+        isbn,
+        edition,
+        publisher,
+        newRetailPrice,
+        usedRetailPrice,
+        usedRentalFee,
+        TextIs,
+      } = item.columns;
+
+      this.selectedTextbook = {
+        title,
+        author,
+        isbn,
+        edition,
+        publisher,
+        newRetailPrice,
+        usedRetailPrice,
+        usedRentalFee,
+        TextIs,
+      };
+      this.modalOpen = true;
     },
   },
   computed: {
