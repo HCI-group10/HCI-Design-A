@@ -35,10 +35,10 @@
                       variant="outlined"
                       v-for="(chip, index) in chips"
                       :key="index"
-                      closable
                       color="tertiary"
                     >
                       {{ chip }}
+                      <v-icon @click="removeChip(index)">mdi-close</v-icon>
                     </v-chip>
                   </v-col>
 
@@ -261,7 +261,7 @@ export default {
       }
     },
     removeChip(index) {
-      this.chips.splice(index, 1);
+      this.chips.splice(index, 1); // Remove the chip from the array
     },
     async go() {
       // GO button logic
