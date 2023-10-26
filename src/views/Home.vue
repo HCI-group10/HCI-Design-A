@@ -129,6 +129,10 @@
                   </v-col>
                   <v-col cols="6">
                     <div>
+                      <strong>Requirement:</strong>
+                      {{ selectedTextbook.TextIs }}
+                    </div>
+                    <div>
                       <strong>New Retail Price:</strong>
                       {{ selectedTextbook.newRetailPrice }}
                     </div>
@@ -186,7 +190,7 @@ export default {
         usedRetailPrice: "$158.00",
         usedRentalFee: "$88.41",
         moreinfo: "",
-        TextIs: "optional",
+        TextIs: "OPTIONAL",
       },
       {
         title: "COMPUTER NETWORKING: A TOP-DOWN APPROACH",
@@ -197,7 +201,7 @@ export default {
         newRetailPrice: "$210.50",
         usedRetailPrice: "$158.00",
         usedRentalFee: "$88.41",
-        TextIs: "optional",
+        TextIs: "OPTIONAL",
       },
       // You can add more textbook entries if needed
     ],
@@ -259,7 +263,7 @@ export default {
         visible: true,
       },
       {
-        title: "Textbook is?",
+        title: "Requirement",
         align: "end",
         sortable: false,
         key: "TextIs",
@@ -411,7 +415,7 @@ export default {
                   const restOfKey = normalizedKey.substring(
                     "Thistextis".length
                   );
-                  tempObject["TextIs"] = restOfKey;
+                  tempObject["TextIs"] = restOfKey.toUpperCase();
                 }
               });
 
