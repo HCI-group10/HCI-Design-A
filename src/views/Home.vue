@@ -130,19 +130,19 @@
                   <v-col cols="6">
                     <div>
                       <strong>Requirement:</strong>
-                      {{ selectedTextbook.TextIs }}
+                      {{ selectedTextbook.textis }}
                     </div>
                     <div>
                       <strong>New Retail Price:</strong>
-                      {{ selectedTextbook.newRetailPrice }}
+                      {{ selectedTextbook.newretailprice }}
                     </div>
                     <div>
                       <strong>Used Retail Price:</strong>
-                      {{ selectedTextbook.usedRetailPrice }}
+                      {{ selectedTextbook.usedretailprice }}
                     </div>
                     <div>
                       <strong>Used Rental Fee:</strong>
-                      {{ selectedTextbook.usedRentalFee }}
+                      {{ selectedTextbook.usedrentalfee }}
                     </div>
                   </v-col>
                 </v-row>
@@ -179,32 +179,7 @@ export default {
     selectedItem: null,
     chips: [],
     headerVisibility: [],
-    textbooks: [
-      {
-        title: "COMPUTER NETWORKING: A TOP-DOWN APPROACH",
-        isbn: "9780133594140",
-        author: "JAMES KUROSE, KEITH ROSS",
-        edition: "7TH",
-        publisher: "PEARSON",
-        newRetailPrice: "$210.50",
-        usedRetailPrice: "$158.00",
-        usedRentalFee: "$88.41",
-        moreinfo: "",
-        TextIs: "OPTIONAL",
-      },
-      {
-        title: "COMPUTER NETWORKING: A TOP-DOWN APPROACH",
-        isbn: "9780133594140",
-        author: "JAMES KUROSE, KEITH ROSS",
-        edition: "7TH",
-        publisher: "PEARSON",
-        newRetailPrice: "$210.50",
-        usedRetailPrice: "$158.00",
-        usedRentalFee: "$88.41",
-        TextIs: "OPTIONAL",
-      },
-      // You can add more textbook entries if needed
-    ],
+    textbooks: [],
     headers: [
       {
         title: "Title",
@@ -245,28 +220,28 @@ export default {
         title: "New Retail Price",
         align: "end",
         sortable: true,
-        key: "newRetailPrice",
+        key: "newretailprice",
         visible: true,
       },
       {
         title: "Used Retail Price",
         align: "end",
         sortable: true,
-        key: "usedRetailPrice",
+        key: "usedretailprice",
         visible: true,
       },
       {
         title: "Used Rental Fee",
         align: "end",
         sortable: false,
-        key: "usedRentalFee",
+        key: "usedrentalfee",
         visible: true,
       },
       {
         title: "Requirement",
         align: "end",
         sortable: false,
-        key: "TextIs",
+        key: "textis",
         visible: true,
       },
       {
@@ -296,19 +271,24 @@ export default {
 
       let validCourses = await this.getClassInfo();
 
-      console.log(validCourses);
-
       //run through each item stored and create url then search up table data
       //parse table data to create items
       //add said items to textbooks object
+
+      this.textbooks = [];
 
       for (let course of validCourses) {
         //{classId, classnumber} objects
         const url = `https://www.bsd.ufl.edu/textadoption/studentview/displayadoption1sect.aspx?SECT=${course.classNumber}&YEAR=23&TERM=8`;
 
         const data = await this.fetchData(url);
+
         if (data) {
-          textbooks = fixArray(data);
+          // Assuming 'data' is the array you want to append to 'textbooks'
+
+          data.forEach((book) => {
+            this.textbooks.push(book);
+          });
         }
       }
     },
@@ -415,7 +395,7 @@ export default {
                   const restOfKey = normalizedKey.substring(
                     "Thistextis".length
                   );
-                  tempObject["TextIs"] = restOfKey.toUpperCase();
+                  tempObject["textis"] = restOfKey.toUpperCase();
                 }
               });
 
@@ -425,7 +405,7 @@ export default {
             }
           });
 
-          return fixArray(data);
+          return this.fixArray(data);
         } else {
           return "Table with class 'books' not found.";
         }
@@ -485,7 +465,6 @@ export default {
           this.selectedTextbook.isbn
         );
       }
-      console.log(link);
       if (link) {
         window.open(link, "_blank");
       } else {
@@ -512,10 +491,10 @@ export default {
         isbn,
         edition,
         publisher,
-        newRetailPrice,
-        usedRetailPrice,
-        usedRentalFee,
-        TextIs,
+        newretailprice,
+        usedretailprice,
+        usedrentalfee,
+        textis,
       } = item.columns;
 
       this.selectedTextbook = {
@@ -524,10 +503,10 @@ export default {
         isbn,
         edition,
         publisher,
-        newRetailPrice,
-        usedRetailPrice,
-        usedRentalFee,
-        TextIs,
+        newretailprice,
+        usedretailprice,
+        usedrentalfee,
+        textis,
       };
       this.modalOpen = true;
     },
