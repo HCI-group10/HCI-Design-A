@@ -294,7 +294,7 @@ export default {
       //if exists store
       //if class doesn't exist sent alert that it didn't work and skip (TODO)
 
-      let validCourses = await getClassInfo();
+      let validCourses = await this.getClassInfo();
 
       console.log(validCourses);
 
@@ -306,7 +306,7 @@ export default {
         //{classId, classnumber} objects
         const url = `https://www.bsd.ufl.edu/textadoption/studentview/displayadoption1sect.aspx?SECT=${course.classNumber}&YEAR=23&TERM=8`;
 
-        const data = await fetchData(url);
+        const data = await this.fetchData(url);
         if (data) {
           textbooks = fixArray(data);
         }
