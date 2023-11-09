@@ -9,7 +9,11 @@
         <span style="padding: 20%"> Book Buddy </span>
 
         <v-avatar size="140">
-          <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
+          <v-img
+            src="@/assets/logo.png"
+            alt="Logo 2"
+            @click="switchDesign"
+          ></v-img>
         </v-avatar>
       </div>
 
@@ -23,7 +27,7 @@
                 <!-- Elements from left to right -->
                 <v-row align="center">
                   <!-- Text box -->
-                  <v-col cols="4">
+                  <v-col v-if="design === 'A'" cols="4">
                     <v-text-field
                       class="text-field"
                       variant="solo-filled"
@@ -42,9 +46,44 @@
                     </v-chip>
                   </v-col>
 
-                  <!-- Add button -->
-                  <v-col cols="1">
-                    <v-btn class="custom-btn" @click="addItem">Add</v-btn>
+                  <v-col v-if="design === 'A'" cols="1">
+                    <v-btn class="custom-btn" @click="addItemA">Add</v-btn>
+                  </v-col>
+
+                  <v-col v-else-if="design === 'B'" cols="4">
+                    <v-col
+                      v-for="(item, index) in listItems"
+                      :key="index"
+                      cols="12"
+                    >
+                      <v-row>
+                        <v-select :label="item.department" readonly></v-select>
+                        <v-select :label="item.course" readonly></v-select>
+                        <v-select :label="item.section" readonly></v-select>
+                        <v-btn @click="addItemB">X</v-btn>
+                      </v-row>
+                    </v-col>
+
+                    <v-row>
+                      <v-select
+                        v-model="dropdownValue1"
+                        :items="dropdownItems1"
+                        label="Department"
+                        @change="updateDropdowns"
+                      ></v-select>
+                      <v-select
+                        v-model="dropdownValue2"
+                        :items="filteredDropdownItems2"
+                        label="Course"
+                        @change="updateDropdowns"
+                      ></v-select>
+                      <v-select
+                        v-model="dropdownValue3"
+                        :items="filteredDropdownItems3"
+                        label="Section"
+                      ></v-select>
+                      <v-btn class="custom-btn" @click="addItemB">Add</v-btn>
+                    </v-row>
                   </v-col>
 
                   <!-- Darker blue container with radio buttons -->
@@ -170,6 +209,7 @@ import cheerio from "cheerio";
 export default {
   data: () => ({
     // Your existing data properties...
+    design: "A",
     textBoxValue: "",
     selectedRadio: "",
     modalOpen: false,
@@ -177,6 +217,11 @@ export default {
     sortBy: "name",
     sortDesc: false,
     selectedItem: null,
+    dropdownValue1: "", // Replace with your actual variable
+    dropdownValue2: "", // Replace with your actual variable
+    dropdownValue3: "", // Replace with your actual variable
+    dropdownItems1: ["ABE", "CNT", "CEN"], // Replace with your actual items
+    listItems: [],
     chips: [],
     headerVisibility: [],
     textbooks: [],
@@ -254,10 +299,32 @@ export default {
     ],
   }),
   methods: {
-    addItem() {
+    switchDesign() {
+      if (this.design == "A") {
+        this.design = "B";
+      } else {
+        this.design = "A";
+      }
+    },
+    addItemA() {
       if (this.textBoxValue) {
         this.chips.push(this.textBoxValue); // Add the value as a chip
         this.textBoxValue = ""; // Clear the text box
+      }
+    },
+    addItemB() {
+      if (this.dropdownValue1 && this.dropdownValue2 && this.dropdownValue3) {
+        this.chips.push(
+          this.dropdownValue1 + this.dropdownValue2 + this.dropdownValue3
+        ); // Add the value as a chip
+        this.listItems.push({
+          department: this.dropdownValue1,
+          course: this.dropdownValue2,
+          section: this.dropdownValue3,
+        });
+        this.dropdownValue1 = ""; //clear dropdowns
+        this.dropdownValue2 = "";
+        this.dropdownValue3 = "";
       }
     },
     removeChip(index) {
@@ -516,6 +583,35 @@ export default {
       // Filter out headers that have visible set to true
       return this.headers.filter((header) => header.visible);
     },
+    filteredDropdownItems2() {
+      // Filter items for the second dropdown based on the selection of the first dropdown
+      // Example logic, replace with your own logic
+      if (this.dropdownValue1 === "ABE") {
+        return ["4812", "Course2", "Course3"];
+      } else if (this.dropdownValue1 === "Department2") {
+        return ["Course4", "Course5", "Course6"];
+      }
+      // Add more conditions based on your requirements
+
+      // Return a default value if no condition matches
+      return [];
+    },
+    filteredDropdownItems3() {
+      // Filter items for the third dropdown based on the selections of the first and second dropdowns
+      // Example logic, replace with your own logic
+      if (this.dropdownValue1 === "ABE" && this.dropdownValue2 === "4812") {
+        return ["Section1", "Section2", "Section3"];
+      } else if (
+        this.dropdownValue1 === "Department2" &&
+        this.dropdownValue2 === "Course4"
+      ) {
+        return ["Section4", "Section5", "Section6"];
+      }
+      // Add more conditions based on your requirements
+
+      // Return a default value if no condition matches
+      return [];
+    },
   },
   mounted() {
     // Initialize headerVisibility with true values for all headers
@@ -565,5 +661,10 @@ export default {
 
 .custom-sw {
   width: 20%;
+}
+.selected-item {
+  background-color: #f2f2f2; /* Customize the background color for the selected items */
+  padding: 10px;
+  margin-bottom: 10px;
 }
 </style>
