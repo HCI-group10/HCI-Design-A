@@ -9,7 +9,11 @@
         <span style="padding: 20%"> Book Buddy </span>
 
         <v-avatar size="140">
-          <v-img src="@/assets/logo.png" alt="Logo 2"></v-img>
+          <v-img
+            src="@/assets/logo.png"
+            alt="Logo 2"
+            @click="switchDesign"
+          ></v-img>
         </v-avatar>
       </div>
 
@@ -23,7 +27,7 @@
                 <!-- Elements from left to right -->
                 <v-row align="center">
                   <!-- Text box -->
-                  <v-col cols="4">
+                  <v-col v-if="design === 'A'" cols="4">
                     <v-text-field
                       class="text-field"
                       variant="solo-filled"
@@ -42,9 +46,50 @@
                     </v-chip>
                   </v-col>
 
-                  <!-- Add button -->
-                  <v-col cols="1">
-                    <v-btn class="custom-btn" @click="addItem">Add</v-btn>
+                  <v-col v-if="design === 'A'" cols="1">
+                    <v-btn class="custom-btn" @click="addItemA">Add</v-btn>
+                  </v-col>
+
+                  <v-col v-else-if="design === 'B'" cols="4">
+                    <v-col
+                      v-for="(item, index) in listItems"
+                      :key="index"
+                      cols="12"
+                    >
+                      <v-row>
+                        <v-combobox
+                          :label="item.department"
+                          readonly
+                          class="select"
+                          menu-icon="null"
+                          variant="solo"
+                        ></v-combobox>
+                        <v-combobox
+                          :label="item.course"
+                          readonly
+                          class="select"
+                          menu-icon="null"
+                          variant="solo"
+                        ></v-combobox>
+                        <v-btn @click="removeListItem(index)">X</v-btn>
+                      </v-row>
+                    </v-col>
+
+                    <v-row>
+                      <v-combobox
+                        v-model="dropdownValue1"
+                        :items="dropdownItems1"
+                        label="Department"
+                        variant="solo"
+                      ></v-combobox>
+                      <v-combobox
+                        v-model="dropdownValue2"
+                        :items="filteredDropdownItems2"
+                        label="Course"
+                        variant="solo"
+                      ></v-combobox>
+                      <v-btn class="custom-btn" @click="addItemB">Add</v-btn>
+                    </v-row>
                   </v-col>
 
                   <!-- Darker blue container with radio buttons -->
@@ -170,6 +215,7 @@ import cheerio from "cheerio";
 export default {
   data: () => ({
     // Your existing data properties...
+    design: "A",
     textBoxValue: "",
     selectedRadio: "",
     modalOpen: false,
@@ -177,6 +223,10 @@ export default {
     sortBy: "name",
     sortDesc: false,
     selectedItem: null,
+    dropdownValue1: "", // Replace with your actual variable
+    dropdownValue2: "", // Replace with your actual variable
+    dropdownItems1: ["ABE", "CNT", "CEN"], // Replace with your actual items
+    listItems: [],
     chips: [],
     headerVisibility: [],
     textbooks: [],
@@ -254,14 +304,38 @@ export default {
     ],
   }),
   methods: {
-    addItem() {
+    switchDesign() {
+      if (this.design == "A") {
+        this.design = "B";
+      } else {
+        this.design = "A";
+      }
+    },
+    addItemA() {
       if (this.textBoxValue) {
         this.chips.push(this.textBoxValue); // Add the value as a chip
         this.textBoxValue = ""; // Clear the text box
       }
     },
+    addItemB() {
+      if (this.dropdownValue1 && this.dropdownValue2) {
+        this.chips.push(this.dropdownValue1 + this.dropdownValue2); // Add the value as a chip
+        this.listItems.push({
+          department: this.dropdownValue1,
+          course: this.dropdownValue2,
+        });
+        this.dropdownValue1 = ""; //clear dropdowns
+        this.dropdownValue2 = "";
+      }
+    },
     removeChip(index) {
       this.chips.splice(index, 1); // Remove the chip from the array
+    },
+    removeListItem(index) {
+      const item =
+        this.listItems.at(index).department + this.listItems.at(index).course;
+      this.chips.splice(this.chips.indexOf(item), 1); //remove from chips array so not double search
+      this.listItems.splice(index, 1);
     },
     async go() {
       // GO button logic
@@ -287,7 +361,7 @@ export default {
           // Assuming 'data' is the array you want to append to 'textbooks'
 
           data.forEach((book) => {
-            this.textbooks.push(book);
+            if (book.title) this.textbooks.push(book);
           });
         }
       }
@@ -516,6 +590,47 @@ export default {
       // Filter out headers that have visible set to true
       return this.headers.filter((header) => header.visible);
     },
+    filteredDropdownItems2() {
+      // Filter items for the second dropdown based on the selection of the first dropdown
+      // Example logic, replace with your own logic
+      if (this.dropdownValue1 === "ABE") {
+        return [
+          "2012C",
+          "3612C",
+          "4042C",
+          "4171",
+          "4231C",
+          "4655C",
+          "4662",
+          "4812",
+          "4905",
+          "4932",
+          "4935",
+          "4949",
+          "5442",
+          "5643C",
+          "5936",
+        ];
+      } else if (this.dropdownValue1 === "CNT") {
+        return ["4007", "5106C", "5410"];
+      } else if (this.dropdownValue1 === "CEN") {
+        return [
+          "3031",
+          "3907C",
+          "3908C",
+          "4721",
+          "4722",
+          "4905",
+          "4940",
+          "5035",
+          "5728",
+        ];
+      }
+      // Add more conditions based on your requirements
+
+      // Return a default value if no condition matches
+      return [];
+    },
   },
   mounted() {
     // Initialize headerVisibility with true values for all headers
@@ -523,6 +638,7 @@ export default {
       { length: this.headers.length },
       () => true
     );
+    this.design = this.design = this.$route.query.design || "A";
   },
 };
 </script>
@@ -565,5 +681,13 @@ export default {
 
 .custom-sw {
   width: 20%;
+}
+.selected-item {
+  background-color: #f2f2f2; /* Customize the background color for the selected items */
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.select {
+  pointer-events: none;
 }
 </style>
