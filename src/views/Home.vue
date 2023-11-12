@@ -57,31 +57,37 @@
                       cols="12"
                     >
                       <v-row>
-                        <v-select :label="item.department" readonly></v-select>
-                        <v-select :label="item.course" readonly></v-select>
-                        <v-select :label="item.section" readonly></v-select>
-                        <v-btn @click="addItemB">X</v-btn>
+                        <v-combobox
+                          :label="item.department"
+                          readonly
+                          class="select"
+                          menu-icon="null"
+                          variant="solo"
+                        ></v-combobox>
+                        <v-combobox
+                          :label="item.course"
+                          readonly
+                          class="select"
+                          menu-icon="null"
+                          variant="solo"
+                        ></v-combobox>
+                        <v-btn @click="removeListItem(index)">X</v-btn>
                       </v-row>
                     </v-col>
 
                     <v-row>
-                      <v-select
+                      <v-combobox
                         v-model="dropdownValue1"
                         :items="dropdownItems1"
                         label="Department"
-                        @change="updateDropdowns"
-                      ></v-select>
-                      <v-select
+                        variant="solo"
+                      ></v-combobox>
+                      <v-combobox
                         v-model="dropdownValue2"
                         :items="filteredDropdownItems2"
                         label="Course"
-                        @change="updateDropdowns"
-                      ></v-select>
-                      <v-select
-                        v-model="dropdownValue3"
-                        :items="filteredDropdownItems3"
-                        label="Section"
-                      ></v-select>
+                        variant="solo"
+                      ></v-combobox>
                       <v-btn class="custom-btn" @click="addItemB">Add</v-btn>
                     </v-row>
                   </v-col>
@@ -219,7 +225,6 @@ export default {
     selectedItem: null,
     dropdownValue1: "", // Replace with your actual variable
     dropdownValue2: "", // Replace with your actual variable
-    dropdownValue3: "", // Replace with your actual variable
     dropdownItems1: ["ABE", "CNT", "CEN"], // Replace with your actual items
     listItems: [],
     chips: [],
@@ -313,22 +318,24 @@ export default {
       }
     },
     addItemB() {
-      if (this.dropdownValue1 && this.dropdownValue2 && this.dropdownValue3) {
-        this.chips.push(
-          this.dropdownValue1 + this.dropdownValue2 + this.dropdownValue3
-        ); // Add the value as a chip
+      if (this.dropdownValue1 && this.dropdownValue2) {
+        this.chips.push(this.dropdownValue1 + this.dropdownValue2); // Add the value as a chip
         this.listItems.push({
           department: this.dropdownValue1,
           course: this.dropdownValue2,
-          section: this.dropdownValue3,
         });
         this.dropdownValue1 = ""; //clear dropdowns
         this.dropdownValue2 = "";
-        this.dropdownValue3 = "";
       }
     },
     removeChip(index) {
       this.chips.splice(index, 1); // Remove the chip from the array
+    },
+    removeListItem(index) {
+      const item =
+        this.listItems.at(index).department + this.listItems.at(index).course;
+      this.chips.splice(this.chips.indexOf(item), 1); //remove from chips array so not double search
+      this.listItems.splice(index, 1);
     },
     async go() {
       // GO button logic
@@ -354,7 +361,7 @@ export default {
           // Assuming 'data' is the array you want to append to 'textbooks'
 
           data.forEach((book) => {
-            this.textbooks.push(book);
+            if (book.title) this.textbooks.push(book);
           });
         }
       }
@@ -587,25 +594,37 @@ export default {
       // Filter items for the second dropdown based on the selection of the first dropdown
       // Example logic, replace with your own logic
       if (this.dropdownValue1 === "ABE") {
-        return ["4812", "Course2", "Course3"];
-      } else if (this.dropdownValue1 === "Department2") {
-        return ["Course4", "Course5", "Course6"];
-      }
-      // Add more conditions based on your requirements
-
-      // Return a default value if no condition matches
-      return [];
-    },
-    filteredDropdownItems3() {
-      // Filter items for the third dropdown based on the selections of the first and second dropdowns
-      // Example logic, replace with your own logic
-      if (this.dropdownValue1 === "ABE" && this.dropdownValue2 === "4812") {
-        return ["Section1", "Section2", "Section3"];
-      } else if (
-        this.dropdownValue1 === "Department2" &&
-        this.dropdownValue2 === "Course4"
-      ) {
-        return ["Section4", "Section5", "Section6"];
+        return [
+          "2012C",
+          "3612C",
+          "4042C",
+          "4171",
+          "4231C",
+          "4655C",
+          "4662",
+          "4812",
+          "4905",
+          "4932",
+          "4935",
+          "4949",
+          "5442",
+          "5643C",
+          "5936",
+        ];
+      } else if (this.dropdownValue1 === "CNT") {
+        return ["4007", "5106C", "5410"];
+      } else if (this.dropdownValue1 === "CEN") {
+        return [
+          "3031",
+          "3907C",
+          "3908C",
+          "4721",
+          "4722",
+          "4905",
+          "4940",
+          "5035",
+          "5728",
+        ];
       }
       // Add more conditions based on your requirements
 
@@ -619,6 +638,7 @@ export default {
       { length: this.headers.length },
       () => true
     );
+    this.design = this.design = this.$route.query.design || "A";
   },
 };
 </script>
@@ -666,5 +686,8 @@ export default {
   background-color: #f2f2f2; /* Customize the background color for the selected items */
   padding: 10px;
   margin-bottom: 10px;
+}
+.select {
+  pointer-events: none;
 }
 </style>

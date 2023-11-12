@@ -4,11 +4,7 @@
     :style="{ backgroundColor: bannerBackgroundColor }"
   >
     Design A
-    <v-switch
-      class="design-switch"
-      v-model="designSwitch"
-      @change="setDesign"
-    ></v-switch>
+    <v-switch class="design-switch" v-model="designSwitch"></v-switch>
     Design B
   </v-banner>
   <div class="launch-page">
@@ -45,12 +41,8 @@ export default {
       // You can use router navigation to go to the Home page or any other desired route
       this.$router.push({
         name: "Home",
-        params: { design: this.designSwitch ? "B" : "A" },
+        query: { design: this.designSwitch ? "B" : "A" },
       }); // Change 'Home' to the actual name of your home route
-    },
-    setDesign() {
-      // Set the design variable based on the state of the switch
-      this.design = this.designSwitch ? "B" : "A";
     },
   },
 };
