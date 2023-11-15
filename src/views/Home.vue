@@ -36,7 +36,7 @@
                     ></v-text-field>
 
                     <v-chip
-                      variant="outlined"
+                      variant="text"
                       v-for="(chip, index) in chips"
                       :key="index"
                       color="tertiary"
@@ -77,7 +77,7 @@
                         ></v-combobox>
                       </v-col>
                       <v-col>
-                        <v-btn @click="removeListItem(index)">X</v-btn>
+                        <v-btn variant="outlined" color="secondary" @click="removeListItem(index)">Remove</v-btn>
                       </v-col>
                       </v-row>
                     </v-col>
@@ -106,25 +106,7 @@
                   </v-col>
 
                   <!-- White container with filter switches -->
-                  <v-col  v-if="design === 'A'">
-                    <v-card color="#FFFFFF">
-                      <v-card-text>
-                        <v-row>
-                          <v-switch
-                            class="custom-sw"
-                            v-for="(header, index) in headers"
-                            :key="index"
-                            v-model="headerVisibility[index]"
-                            @change="toggleColumn(index)"
-                            :label="header.title"
-                            :color="'tertiary'"
-                          ></v-switch>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-
-                  <v-col   v-else-if="design === 'B'">
+                  <v-col>
                     <v-card color="#FFFFFF">
                       <v-card-text>
                         <v-row>
