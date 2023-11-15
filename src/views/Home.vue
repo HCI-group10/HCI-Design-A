@@ -25,7 +25,7 @@
             <v-card class="elevation-2, light-blue-container">
               <v-card-text>
                 <!-- Elements from left to right -->
-                <v-row align="center">
+                <v-row align="center" justify="center">
                   <!-- Text box -->
                   <v-col v-if="design === 'A'" cols="4">
                     <v-text-field
@@ -50,20 +50,24 @@
                     <v-btn class="custom-btn" @click="addItemA">Add</v-btn>
                   </v-col>
 
-                  <v-col v-else-if="design === 'B'" cols="4">
+                  <v-col v-else-if="design === 'B'" cols="5">
                     <v-col
                       v-for="(item, index) in listItems"
                       :key="index"
                       cols="12"
                     >
-                      <v-row>
-                        <v-combobox
+                      <v-row align="center" justify="center">
+                        <v-col>
+                        <v-combobox 
                           :label="item.department"
                           readonly
                           class="select"
                           menu-icon="null"
                           variant="solo"
-                        ></v-combobox>
+                          >
+                        </v-combobox>
+                      </v-col>
+                      <v-col>
                         <v-combobox
                           :label="item.course"
                           readonly
@@ -71,29 +75,56 @@
                           menu-icon="null"
                           variant="solo"
                         ></v-combobox>
+                      </v-col>
+                      <v-col>
                         <v-btn @click="removeListItem(index)">X</v-btn>
+                      </v-col>
                       </v-row>
                     </v-col>
 
-                    <v-row>
+                    <v-row align="center" justify="center">
+                      <v-col>
                       <v-combobox
                         v-model="dropdownValue1"
                         :items="dropdownItems1"
                         label="Department"
                         variant="solo"
                       ></v-combobox>
+                    </v-col>
+                    <v-col>
                       <v-combobox
                         v-model="dropdownValue2"
                         :items="filteredDropdownItems2"
                         label="Course"
                         variant="solo"
                       ></v-combobox>
-                      <v-btn class="custom-btn" @click="addItemB">Add</v-btn>
+                    </v-col>
+                    <v-col cols="2">
+                      <v-btn class="custom-btn d-flex align-items-center" @click="addItemB">Add</v-btn>
+                    </v-col>
                     </v-row>
                   </v-col>
 
-                  <!-- Darker blue container with radio buttons -->
-                  <v-col>
+                  <!-- White container with filter switches -->
+                  <v-col  v-if="design === 'A'">
+                    <v-card color="#FFFFFF">
+                      <v-card-text>
+                        <v-row>
+                          <v-switch
+                            class="custom-sw"
+                            v-for="(header, index) in headers"
+                            :key="index"
+                            v-model="headerVisibility[index]"
+                            @change="toggleColumn(index)"
+                            :label="header.title"
+                            :color="'tertiary'"
+                          ></v-switch>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+
+                  <v-col   v-else-if="design === 'B'">
                     <v-card color="#FFFFFF">
                       <v-card-text>
                         <v-row>
