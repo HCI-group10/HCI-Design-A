@@ -1,5 +1,7 @@
 # Previewing Book Buddy
-Use live hosted netlify link: https://bookbuddyhci.netlify.app/
+### Use live hosted netlify link: https://bookbuddyhci.netlify.app/
+
+This requires a [cors unblock extension](https://chromewebstore.google.com/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino?pli=1)
 
 Or follow instructions below
 
