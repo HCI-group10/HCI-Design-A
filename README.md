@@ -1,69 +1,47 @@
-# essentials
+# Previewing Book Buddy
+Use live hosted netlify link: https://bookbuddyhci.netlify.app/
+
+Or follow instructions below
+
+# Essentials for setup
 
 ## Project setup
 
 ```
-# yarn
-yarn
-
 # npm
 npm install
-
-# pnpm
-pnpm install
-
-# bun
-bun install
 ```
 
 ### Compiles and hot-reloads for development
 
 ```
-# yarn
-yarn dev
-
 # npm
 npm run dev
 
-# pnpm
-pnpm dev
+Open local host link in browser
+```
 
-# bun
-bun run dev
+### Compiles and runs for viewing (Recommended for non-dev testing)
+
+```
+# npm
+npm run preview
+
+Open local host link in browser
 ```
 
 ### Compiles and minifies for production
 
 ```
-# yarn
-yarn build
-
 # npm
 npm run build
 
-# pnpm
-pnpm build
-
-# bun
-bun run build
+Files are saved to "Dist" folder
 ```
 
 ### Lints and fixes files
 
 ```
-# yarn
-yarn lint
-
 # npm
 npm run lint
-
-# pnpm
-pnpm lint
-
-# bun
-bun run lint
 ```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
